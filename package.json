@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest --passWithNoTests",
+    "test": "jest --maxWorkers=1 --passWithNoTests",
     "test:watch": "yarn test -- --watch",
     "test:staged": "yarn test --",
     "test:ci": "yarn test -- --coverage"
