@@ -12,7 +12,7 @@ const makeSut = (url: string = 'any_url'): SutTypes => {
 
   return {
     sut,
-    httpPostClientSpy,
+    httpPostClientSpy
   }
 }
 
