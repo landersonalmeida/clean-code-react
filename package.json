@@ -10,6 +10,17 @@
     "test:ci": "yarn test -- --coverage",
     "postinstall": "husky install"
   },
+  "husky": {
+    "hooks": {
+        "pre-commit": "npx lint-staged"
+    }
+},
+"lint-staged": {
+    "src/**/*.js": [
+        "npx pretty-quick --staged",
+        "npx eslint --fix src --ext .js"
+    ]
+},
   "keywords": [],
   "author": "",
   "license": "ISC",
