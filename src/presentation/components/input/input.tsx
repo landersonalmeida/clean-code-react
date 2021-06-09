@@ -5,7 +5,7 @@ import FormContext from '@/presentation/contexts/form/form-context'
 type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>, HTMLInputElement>
 
 const Input: React.FC<Props> = (props: Props) => {
-  const { errorState } = useContext(FormContext)
+  const { state, setState } = useContext(FormContext)
 
   const enableInput = (event: React.FocusEvent<HTMLInputElement>): void => {
     event.target.readOnly = false
@@ -16,17 +16,24 @@ const Input: React.FC<Props> = (props: Props) => {
   }
 
   const getTitle = (): string => {
-    return props.type === 'email' ? errorState.emailError : errorState.passwordError
+    return props.type === 'email' ? state.emailError : state.passwordError
   }
 
-  const getTestId = (): string => {
+  const getTestIdSpan = (): string => {
     return props.type === 'email' ? 'email-status' : 'password-status'
+  }
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
+    setState({
+      ...state,
+      [event.target.name]: event.target.value
+    })
   }
 
   return (
     <div className={Styles.inputWrap}>
-      <input {...props} readOnly onFocus={enableInput} />
-      <span data-testid={getTestId()} title={getTitle()} className={Styles.status}>{getStatus()}</span>
+      <input data-testid={props.type} {...props} readOnly onFocus={enableInput} onChange={handleChange} />
+      <span data-testid={getTestIdSpan()} title={getTitle()} className={Styles.status}>{getStatus()}</span>
     </div>
   )
 }
