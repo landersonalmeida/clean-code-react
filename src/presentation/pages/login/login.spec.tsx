@@ -9,7 +9,10 @@ describe('Login Component', () => {
     const errorWrap = screen.getByTestId('error-wrap')
     expect(errorWrap.childElementCount).toBe(0)
 
-    const submitButton = screen.getByRole('button', { name: /Entrar/i })
+    const submitButton = screen.getByRole('button', { name: 'Entrar' })
     expect(submitButton).toBeDisabled()
+
+    const emailStatus = screen.getByTestId('email-status')
+    expect(emailStatus).toHaveTextContent('🔴')
   })
 })
