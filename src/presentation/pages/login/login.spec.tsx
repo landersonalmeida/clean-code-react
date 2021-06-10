@@ -3,6 +3,7 @@ import { render, RenderResult, fireEvent, screen } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import Login from './Login'
 import { ValidationSpy } from '@/presentation/test'
+import faker from 'faker'
 
 type SutTypes = {
   sut: RenderResult
@@ -39,19 +40,21 @@ describe('Login Component', () => {
 
   test('Should call Validation with correct email', () => {
     const { validationSpy } = makeSut()
-
     const emailInput = screen.getByTestId('email')
-    fireEvent.input(emailInput, { target: { value: 'any_email' } })
+    const email = faker.internet.email()
+
+    fireEvent.input(emailInput, { target: { value: email } })
     expect(validationSpy.fieldName).toBe('email')
-    expect(validationSpy.fieldValue).toBe('any_email')
+    expect(validationSpy.fieldValue).toBe(email)
   })
 
   test('Should call Validation with correct password', () => {
     const { validationSpy } = makeSut()
-
     const passwordInput = screen.getByTestId('password')
-    fireEvent.input(passwordInput, { target: { value: 'any_password' } })
+    const password = faker.internet.password()
+
+    fireEvent.input(passwordInput, { target: { value: password } })
     expect(validationSpy.fieldName).toBe('password')
-    expect(validationSpy.fieldValue).toBe('any_password')
+    expect(validationSpy.fieldValue).toBe(password)
   })
 })
