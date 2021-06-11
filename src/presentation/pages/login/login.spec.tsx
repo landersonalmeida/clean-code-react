@@ -1,19 +1,41 @@
 import React from 'react'
+import faker from 'faker'
 import { render, fireEvent, screen } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import Login from './Login'
 import { ValidationStub } from '@/presentation/test'
-import faker from 'faker'
+import { Authentication, AuthenticationParams } from '@/domain/usecases'
+import { AccountModel } from '@/domain/models'
+import { mockAccountModel } from '@/domain/test'
+
+class AuthenticationSpy implements Authentication {
+  account = mockAccountModel()
+  params?: AuthenticationParams
+
+  async auth (params: AuthenticationParams): Promise<AccountModel> {
+    this.params = params
+
+    return await Promise.resolve(this.account)
+  }
+}
+
+type SutTypes = {
+  authenticationSpy: AuthenticationSpy
+}
 
 type SutParams = {
   validationError: string
 }
 
-const makeSut = (params?: SutParams): void => {
+const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   validationStub.errorMessage = params?.validationError
 
-  render(<Login validation={validationStub} />)
+  const authenticationSpy = new AuthenticationSpy()
+
+  render(<Login validation={validationStub} authentication={authenticationSpy} />)
+
+  return { authenticationSpy }
 }
 
 describe('Login Component', () => {
@@ -109,5 +131,22 @@ describe('Login Component', () => {
 
     const spinner = screen.getByTestId('spinner')
     expect(spinner).toBeTruthy()
+  })
+
+  test('Should call authentication with correct values', () => {
+    const { authenticationSpy } = makeSut()
+
+    const email = faker.internet.email()
+    const emailInput = screen.getByTestId('email')
+    fireEvent.input(emailInput, { target: { value: email } })
+
+    const password = faker.internet.password()
+    const passwordInput = screen.getByTestId('password')
+    fireEvent.input(passwordInput, { target: { value: password } })
+
+    const submitButton = screen.getByRole('button', { name: 'Entrar' })
+    submitButton.click()
+
+    expect(authenticationSpy.params).toEqual({ email, password })
   })
 })
