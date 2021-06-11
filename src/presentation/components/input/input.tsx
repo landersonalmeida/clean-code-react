@@ -11,12 +11,16 @@ const Input: React.FC<Props> = (props: Props) => {
     event.target.readOnly = false
   }
 
-  const getStatus = (): string => {
-    return '🔴'
+  const getError = (): string => {
+    return props.type === 'email' ? state.emailError : state.passwordError
   }
 
   const getTitle = (): string => {
-    return props.type === 'email' ? state.emailError : state.passwordError
+    return getError() || 'Tudo certo'
+  }
+
+  const getStatus = (): string => {
+    return getError() ? '🔴' : '🟢'
   }
 
   const getTestIdSpan = (): string => {

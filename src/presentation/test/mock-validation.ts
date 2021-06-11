@@ -1,7 +1,7 @@
 import { Validation } from '@/presentation/protocols/validation'
 
 export class ValidationStub implements Validation {
-  errorMessage?: string
+  errorMessage?: string | null
   fieldName?: string
   fieldValue?: string
 
