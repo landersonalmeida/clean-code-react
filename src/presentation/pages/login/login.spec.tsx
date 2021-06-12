@@ -47,7 +47,7 @@ const simulateAValidSubmit = (
   populateEmailField(email)
   populatePasswordField(password)
 
-  const submitButton = screen.getByRole('button', { name: 'Entrar' })
+  const submitButton = screen.getByRole('submit')
   submitButton.click()
 }
 
@@ -59,7 +59,7 @@ describe('Login Component', () => {
     const errorWrap = screen.getByTestId('error-wrap')
     expect(errorWrap.childElementCount).toBe(0)
 
-    const submitButton = screen.getByRole('button', { name: 'Entrar' })
+    const submitButton = screen.getByRole('submit')
     expect(submitButton).toBeDisabled()
 
     simulateStatusForField('email', validationError)
@@ -100,7 +100,7 @@ describe('Login Component', () => {
     populateEmailField()
     populatePasswordField()
 
-    const submitButton = screen.getByRole('button', { name: 'Entrar' })
+    const submitButton = screen.getByRole('submit')
     expect(submitButton).toBeEnabled()
   })
 
@@ -130,5 +130,14 @@ describe('Login Component', () => {
     simulateAValidSubmit()
 
     expect(authenticationSpy.callsCount).toBe(1)
+  })
+
+  test('Should not call authentication if form is invalid', () => {
+    const { authenticationSpy } = makeSut({ validationError: faker.random.words() })
+
+    populateEmailField()
+    fireEvent.submit(screen.getByRole('form'))
+
+    expect(authenticationSpy.callsCount).toBe(0)
   })
 })
