@@ -1,5 +1,6 @@
 import React from 'react'
 import faker from 'faker'
+import 'jest-localstorage-mock'
 import { render, fireEvent, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import Login from './Login'
@@ -53,6 +54,10 @@ const simulateAValidSubmit = (
 }
 
 describe('Login Component', () => {
+  beforeEach(() => {
+    localStorage.clear()
+  })
+
   test('Should start with initial value', () => {
     const validationError = faker.lorem.words()
     makeSut({ validationError })
@@ -157,5 +162,15 @@ describe('Login Component', () => {
     const mainError = screen.getByTestId('main-error')
     expect(mainError.textContent).toBe(error.message)
     expect(errorWrap.childElementCount).toBe(1)
+  })
+
+  test('Should add accessToken to localStorage on success', async () => {
+    const { authenticationSpy } = makeSut()
+
+    simulateAValidSubmit()
+
+    await waitFor(() => screen.getByRole('form'))
+
+    expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', authenticationSpy.account.accessToken)
   })
 })
