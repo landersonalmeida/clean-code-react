@@ -39,9 +39,14 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
 
       setState({ ...state, isLoading: true })
 
-      await authentication.auth({ email: state.email, password: state.password })
+      const account = await authentication.auth({ email: state.email, password: state.password })
+      localStorage.setItem('accessToken', account.accessToken)
     } catch (error) {
-      setState({ ...state, isLoading: false, mainError: (error as InvalidCredentialsError).message })
+      setState({
+        ...state,
+        isLoading: false,
+        mainError: (error as InvalidCredentialsError).message
+      })
     }
   }
 
