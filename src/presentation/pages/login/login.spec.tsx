@@ -43,21 +43,48 @@ const populatePasswordField = (password: string = faker.internet.password()): vo
   fireEvent.input(passwordInput, { target: { value: password } })
 }
 
-const simulateStatusForField = (fieldName: string, validationError?: string): void => {
+const simulateAValidSubmit = async (
+  email: string = faker.internet.email(),
+  password: string = faker.internet.password()
+): Promise<void> => {
+  populateEmailField(email)
+  populatePasswordField(password)
+
+  const form = screen.getByRole('form')
+  fireEvent.submit(form)
+
+  await waitFor(() => form)
+}
+
+const testStatusForField = (fieldName: string, validationError?: string): void => {
   const emailStatus = screen.getByTestId(`${fieldName}-status`)
   expect(emailStatus.title).toBe(validationError ?? 'Tudo certo')
   expect(emailStatus).toHaveTextContent(validationError ? '🔴' : '🟢')
 }
 
-const simulateAValidSubmit = (
-  email: string = faker.internet.email(),
-  password: string = faker.internet.password()
-): void => {
-  populateEmailField(email)
-  populatePasswordField(password)
+const testErrorWrapChildCount = (count: number): void => {
+  const errorWrap = screen.getByTestId('error-wrap')
+  expect(errorWrap.childElementCount).toBe(count)
+}
 
-  const submitButton = screen.getByRole('submit')
-  submitButton.click()
+const testElementExists = (fieldName: string): void => {
+  const el = screen.getByTestId(fieldName)
+  expect(el).toBeTruthy()
+}
+
+const testElementText = (fieldName: string, text: string): void => {
+  const el = screen.getByTestId(fieldName)
+  expect(el.textContent).toBe(text)
+}
+
+const testButtonIsDisabled = (roleName: string, isDisabled: boolean): void => {
+  const button = screen.getByRole(roleName)
+
+  if (isDisabled) {
+    expect(button).toBeDisabled()
+  } else {
+    expect(button).toBeEnabled()
+  }
 }
 
 describe('Login Component', () => {
@@ -69,14 +96,10 @@ describe('Login Component', () => {
     const validationError = faker.lorem.words()
     makeSut({ validationError })
 
-    const errorWrap = screen.getByTestId('error-wrap')
-    expect(errorWrap.childElementCount).toBe(0)
-
-    const submitButton = screen.getByRole('submit')
-    expect(submitButton).toBeDisabled()
-
-    simulateStatusForField('email', validationError)
-    simulateStatusForField('password', validationError)
+    testErrorWrapChildCount(0)
+    testButtonIsDisabled('submit', true)
+    testStatusForField('email', validationError)
+    testStatusForField('password', validationError)
   })
 
   test('Should show email error if Validation fails', () => {
@@ -85,7 +108,7 @@ describe('Login Component', () => {
     makeSut({ validationError })
     populateEmailField()
 
-    simulateStatusForField('email', validationError)
+    testStatusForField('email', validationError)
   })
 
   test('Should show password error if Validation fails', () => {
@@ -93,19 +116,19 @@ describe('Login Component', () => {
 
     makeSut({ validationError })
     populatePasswordField()
-    simulateStatusForField('password', validationError)
+    testStatusForField('password', validationError)
   })
 
   test('Should show valid email state if Validation succeeds', () => {
     makeSut()
     populateEmailField()
-    simulateStatusForField('email')
+    testStatusForField('email')
   })
 
   test('Should show valid password state if Validation succeeds', () => {
     makeSut()
     populatePasswordField()
-    simulateStatusForField('password')
+    testStatusForField('password')
   })
 
   test('Should enable submit button if form is valid', () => {
@@ -113,43 +136,40 @@ describe('Login Component', () => {
     populateEmailField()
     populatePasswordField()
 
-    const submitButton = screen.getByRole('submit')
-    expect(submitButton).toBeEnabled()
+    testButtonIsDisabled('submit', false)
   })
 
-  test('Should show spinner on submit', () => {
+  test('Should show spinner on submit', async () => {
     makeSut()
-    simulateAValidSubmit()
+    await simulateAValidSubmit()
 
-    const spinner = screen.getByTestId('spinner')
-    expect(spinner).toBeTruthy()
+    testElementExists('spinner')
   })
 
-  test('Should call authentication with correct values', () => {
+  test('Should call authentication with correct values', async () => {
     const { authenticationSpy } = makeSut()
 
     const email = faker.internet.email()
     const password = faker.internet.password()
 
-    simulateAValidSubmit(email, password)
+    await simulateAValidSubmit(email, password)
 
     expect(authenticationSpy.params).toEqual({ email, password })
   })
 
-  test('Should call authentication only once', () => {
+  test('Should call authentication only once', async () => {
     const { authenticationSpy } = makeSut()
 
-    simulateAValidSubmit()
-    simulateAValidSubmit()
+    await simulateAValidSubmit()
+    await simulateAValidSubmit()
 
     expect(authenticationSpy.callsCount).toBe(1)
   })
 
-  test('Should not call authentication if form is invalid', () => {
+  test('Should not call authentication if form is invalid', async () => {
     const { authenticationSpy } = makeSut({ validationError: faker.random.words() })
 
-    populateEmailField()
-    fireEvent.submit(screen.getByRole('form'))
+    await simulateAValidSubmit()
 
     expect(authenticationSpy.callsCount).toBe(0)
   })
@@ -160,23 +180,17 @@ describe('Login Component', () => {
     const error = new InvalidCredentialsError()
     jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(error))
 
-    simulateAValidSubmit()
+    await simulateAValidSubmit()
 
-    const errorWrap = screen.getByTestId('error-wrap')
+    testElementText('main-error', error.message)
 
-    await waitFor(() => errorWrap)
-
-    const mainError = screen.getByTestId('main-error')
-    expect(mainError.textContent).toBe(error.message)
-    expect(errorWrap.childElementCount).toBe(1)
+    testErrorWrapChildCount(1)
   })
 
   test('Should add accessToken to localStorage on success', async () => {
     const { authenticationSpy } = makeSut()
 
-    simulateAValidSubmit()
-
-    await waitFor(() => screen.getByRole('form'))
+    await simulateAValidSubmit()
 
     expect(localStorage.setItem).toHaveBeenCalledWith('accessToken', authenticationSpy.account.accessToken)
     expect(history.length).toBe(1)
