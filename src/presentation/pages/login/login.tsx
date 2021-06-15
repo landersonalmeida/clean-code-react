@@ -12,9 +12,18 @@ type Props = {
   authentication: Authentication
 }
 
+type StateProps = {
+  isLoading: boolean
+  email: string
+  password: string
+  emailError: string | null
+  passwordError: string | null
+  mainError: string
+}
+
 const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
   const history = useHistory()
-  const [state, setState] = useState({
+  const [state, setState] = useState<StateProps>({
     isLoading: false,
     email: '',
     password: '',
@@ -35,7 +44,7 @@ const Login: React.FC<Props> = ({ validation, authentication }: Props) => {
     event.preventDefault()
 
     try {
-      if (state.isLoading || state.emailError || state.passwordError) {
+      if (state.isLoading ?? state.emailError ?? state.passwordError) {
         return
       }
 
