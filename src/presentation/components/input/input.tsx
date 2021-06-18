@@ -12,7 +12,7 @@ const Input: React.FC<Props> = (props: Props) => {
   }
 
   const getError = (): string => {
-    return props.type === 'email' ? state.emailError : state?.passwordError
+    return props.type === 'email' ? state.emailError : state.passwordError
   }
 
   const getTitle = (): string => {
