@@ -12,7 +12,7 @@ const Input: React.FC<Props> = (props: Props) => {
   }
 
   const getError = (): string => {
-    return props.type === 'email' ? state.emailError : state.passwordError
+    return props.type === 'email' ? state.emailError : state?.passwordError
   }
 
   const getTitle = (): string => {
@@ -36,7 +36,7 @@ const Input: React.FC<Props> = (props: Props) => {
 
   return (
     <div className={Styles.inputWrap}>
-      <input data-testid={props.type} {...props} readOnly onFocus={enableInput} onChange={handleChange} />
+      <input data-testid={props.name} {...props} readOnly onFocus={enableInput} onChange={handleChange} />
       <span data-testid={getTestIdSpan()} title={getTitle()} className={Styles.status}>{getStatus()}</span>
     </div>
   )
