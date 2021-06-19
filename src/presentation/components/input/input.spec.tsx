@@ -1,4 +1,4 @@
-import React from 'React'
+import React from 'react'
 import faker from 'faker'
 import { screen, render, fireEvent } from '@testing-library/react'
 import Input from './input'
