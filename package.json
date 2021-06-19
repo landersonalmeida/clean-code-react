@@ -6,9 +6,9 @@
   "scripts": {
     "start": "webpack serve --open",
     "test": "jest --passWithNoTests --no-cache --runInBand",
-    "test:watch": "yarn test -- --watch",
-    "test:staged": "yarn test --",
-    "test:ci": "yarn test -- --coverage",
+    "test:watch": "npm test -- --watch",
+    "test:staged": "npm test --",
+    "test:ci": "npm test -- --coverage",
     "check": "npm-check -u -s"
   },
   "keywords": [],
