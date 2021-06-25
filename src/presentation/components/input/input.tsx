@@ -11,20 +11,8 @@ const Input: React.FC<Props> = (props: Props) => {
     event.target.readOnly = false
   }
 
-  const getError = (): string => {
-    return props.type === 'email' ? state.emailError : state.passwordError
-  }
-
-  const getTitle = (): string => {
-    return getError() || 'Tudo certo'
-  }
-
   const getStatus = (): string => {
-    return getError() ? '🔴' : '🟢'
-  }
-
-  const getTestIdSpan = (): string => {
-    return props.type === 'email' ? 'email-status' : 'password-status'
+    return state[`${props.name!}Error`] ? '🔴' : '🟢'
   }
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
@@ -37,7 +25,7 @@ const Input: React.FC<Props> = (props: Props) => {
   return (
     <div className={Styles.inputWrap}>
       <input data-testid={props.name} {...props} readOnly onFocus={enableInput} onChange={handleChange} />
-      <span data-testid={getTestIdSpan()} title={getTitle()} className={Styles.status}>{getStatus()}</span>
+      <span data-testid={`${props.name!}-status`} title={state[`${props.name!}Error`] || 'Tudo certo'} className={Styles.status}>{getStatus()}</span>
     </div>
   )
 }
