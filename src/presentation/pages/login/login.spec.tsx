@@ -98,7 +98,7 @@ const testButtonIsDisabled = (roleName: string, isDisabled: boolean): void => {
 }
 
 describe('Login Component', () => {
-  test('Should start with initial value', () => {
+  test('Should start with initial state', () => {
     const validationError = faker.lorem.words()
     makeSut({ validationError })
 
