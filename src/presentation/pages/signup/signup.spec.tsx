@@ -1,6 +1,6 @@
 import React from 'react'
 import faker from 'faker'
-import { fireEvent, render, screen } from '@testing-library/react'
+import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import SignUp from './signup'
 import { Helper, ValidationStub } from '@/presentation/test'
@@ -23,6 +23,27 @@ const makeSut = (params?: SutParams): void => {
       <SignUp validation={validationStub} />
     // </Router>
   )
+}
+
+const simulateAValidSubmit = async (
+  name: string = faker.name.findName(),
+  email: string = faker.internet.email(),
+  password: string = faker.internet.password()
+): Promise<void> => {
+  Helper.populateField('name', name)
+  Helper.populateField('email', email)
+  Helper.populateField('password', password)
+  Helper.populateField('passwordConfirmation', password)
+
+  const form = screen.getByRole('form')
+  fireEvent.submit(form)
+
+  await waitFor(() => form)
+}
+
+const testElementExists = (fieldName: string): void => {
+  const el = screen.getByTestId(fieldName)
+  expect(el).toBeTruthy()
 }
 
 describe('SignUp Component', () => {
@@ -110,5 +131,13 @@ describe('SignUp Component', () => {
     Helper.populateField('password')
     Helper.populateField('passwordConfirmation')
     Helper.testButtonIsDisabled('submit', false)
+  })
+
+  test('Should show spinner on submit', async () => {
+    makeSut()
+
+    await simulateAValidSubmit()
+
+    testElementExists('spinner')
   })
 })
