@@ -56,11 +56,6 @@ const simulateAValidSubmit = async (
   await waitFor(() => form)
 }
 
-const testElementExists = (fieldName: string): void => {
-  const el = screen.getByTestId(fieldName)
-  expect(el).toBeTruthy()
-}
-
 const testElementText = (fieldName: string, text: string): void => {
   const el = screen.getByTestId(fieldName)
   expect(el.textContent).toBe(text)
@@ -123,7 +118,7 @@ describe('Login Component', () => {
 
     await simulateAValidSubmit()
 
-    testElementExists('spinner')
+    Helper.testElementExists('spinner')
   })
 
   test('Should call authentication with correct values', async () => {

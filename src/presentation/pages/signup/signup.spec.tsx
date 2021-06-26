@@ -41,11 +41,6 @@ const simulateAValidSubmit = async (
   await waitFor(() => form)
 }
 
-const testElementExists = (fieldName: string): void => {
-  const el = screen.getByTestId(fieldName)
-  expect(el).toBeTruthy()
-}
-
 describe('SignUp Component', () => {
   test('Should start with initial state', () => {
     const validationError = faker.random.word()
@@ -138,6 +133,6 @@ describe('SignUp Component', () => {
 
     await simulateAValidSubmit()
 
-    testElementExists('spinner')
+    Helper.testElementExists('spinner')
   })
 })
