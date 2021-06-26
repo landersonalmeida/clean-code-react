@@ -69,6 +69,7 @@ const testElementText = (fieldName: string, text: string): void => {
 describe('Login Component', () => {
   test('Should start with initial state', () => {
     const validationError = faker.lorem.words()
+
     makeSut({ validationError })
 
     Helper.testChildCount('error-wrap', 0)
@@ -97,26 +98,29 @@ describe('Login Component', () => {
 
   test('Should show valid email state if Validation succeeds', () => {
     makeSut()
+
     Helper.populateField('email')
     Helper.testStatusForField('email')
   })
 
   test('Should show valid password state if Validation succeeds', () => {
     makeSut()
+
     Helper.populateField('password')
     Helper.testStatusForField('password')
   })
 
   test('Should enable submit button if form is valid', () => {
     makeSut()
+
     Helper.populateField('email')
     Helper.populateField('password')
-
     Helper.testButtonIsDisabled('submit', false)
   })
 
   test('Should show spinner on submit', async () => {
     makeSut()
+
     await simulateAValidSubmit()
 
     testElementExists('spinner')
