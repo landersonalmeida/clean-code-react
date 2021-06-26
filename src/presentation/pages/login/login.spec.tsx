@@ -43,22 +43,12 @@ const makeSut = (params?: SutParams): SutTypes => {
   }
 }
 
-const populateEmailField = (email: string = faker.internet.email()): void => {
-  const emailInput = screen.getByTestId('email')
-  fireEvent.input(emailInput, { target: { value: email } })
-}
-
-const populatePasswordField = (password: string = faker.internet.password()): void => {
-  const passwordInput = screen.getByTestId('password')
-  fireEvent.input(passwordInput, { target: { value: password } })
-}
-
 const simulateAValidSubmit = async (
   email: string = faker.internet.email(),
   password: string = faker.internet.password()
 ): Promise<void> => {
-  populateEmailField(email)
-  populatePasswordField(password)
+  Helper.populateField('email', email)
+  Helper.populateField('password', password)
 
   const form = screen.getByRole('form')
   fireEvent.submit(form)
@@ -91,8 +81,8 @@ describe('Login Component', () => {
     const validationError = faker.lorem.words()
 
     makeSut({ validationError })
-    populateEmailField()
 
+    Helper.populateField('email')
     Helper.testStatusForField('email', validationError)
   })
 
@@ -100,26 +90,27 @@ describe('Login Component', () => {
     const validationError = faker.lorem.words()
 
     makeSut({ validationError })
-    populatePasswordField()
+
+    Helper.populateField('password')
     Helper.testStatusForField('password', validationError)
   })
 
   test('Should show valid email state if Validation succeeds', () => {
     makeSut()
-    populateEmailField()
+    Helper.populateField('email')
     Helper.testStatusForField('email')
   })
 
   test('Should show valid password state if Validation succeeds', () => {
     makeSut()
-    populatePasswordField()
+    Helper.populateField('password')
     Helper.testStatusForField('password')
   })
 
   test('Should enable submit button if form is valid', () => {
     makeSut()
-    populateEmailField()
-    populatePasswordField()
+    Helper.populateField('email')
+    Helper.populateField('password')
 
     Helper.testButtonIsDisabled('submit', false)
   })
