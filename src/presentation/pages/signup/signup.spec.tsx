@@ -3,26 +3,32 @@ import faker from 'faker'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import SignUp from './signup'
-import { Helper, ValidationStub } from '@/presentation/test'
+import { AddAccountSpy, Helper, ValidationStub } from '@/presentation/test'
 
-// type SutTypes = {
-//   authenticationSpy: AuthenticationSpy
-//   saveAccessTokenMock: SaveAccessTokenMock
-// }
+type SutTypes = {
+  addAccountSpy: AddAccountSpy
+}
 
 type SutParams = {
   validationError: string
 }
 
-const makeSut = (params?: SutParams): void => {
+const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   validationStub.errorMessage = params?.validationError
 
+  const addAccountSpy = new AddAccountSpy()
+
   render(
     // <Router history={history}>
-      <SignUp validation={validationStub} />
+      <SignUp
+        validation={validationStub}
+        addAccount={addAccountSpy}
+      />
     // </Router>
   )
+
+  return { addAccountSpy }
 }
 
 const simulateAValidSubmit = async (
@@ -134,5 +140,22 @@ describe('SignUp Component', () => {
     await simulateAValidSubmit()
 
     Helper.testElementExists('spinner')
+  })
+
+  test('Should call AddAccount with correct values', async () => {
+    const { addAccountSpy } = makeSut()
+
+    const name = faker.name.findName()
+    const email = faker.internet.email()
+    const password = faker.internet.password()
+
+    await simulateAValidSubmit(name, email, password)
+
+    expect(addAccountSpy.params).toEqual({
+      name,
+      email,
+      password,
+      passwordConfirmation: password
+    })
   })
 })
