@@ -167,7 +167,7 @@ describe('SignUp Component', () => {
     })
   })
 
-  test('Should call authentication only once', async () => {
+  test('Should call AddAccount only once', async () => {
     const { addAccountSpy } = makeSut()
 
     await simulateAValidSubmit()
@@ -176,7 +176,7 @@ describe('SignUp Component', () => {
     expect(addAccountSpy.callsCount).toBe(1)
   })
 
-  test('Should not call authentication if form is invalid', async () => {
+  test('Should not call AddAccount if form is invalid', async () => {
     const { addAccountSpy } = makeSut({ validationError: faker.random.words() })
 
     await simulateAValidSubmit()
@@ -204,5 +204,17 @@ describe('SignUp Component', () => {
     expect(saveAccessTokenMock.accessToken).toBe(addAccountSpy.account.accessToken)
     expect(history.length).toBe(1)
     expect(history.location.pathname).toBe('/')
+  })
+
+  test('Should present error if SaveAccessToken fails', async () => {
+    const { saveAccessTokenMock } = makeSut()
+
+    const error = new EmailInUseError()
+    jest.spyOn(saveAccessTokenMock, 'save').mockRejectedValueOnce(error)
+
+    await simulateAValidSubmit()
+
+    Helper.testElementText('main-error', error.message)
+    Helper.testChildCount('error-wrap', 1)
   })
 })

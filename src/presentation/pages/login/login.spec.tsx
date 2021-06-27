@@ -116,7 +116,7 @@ describe('Login Component', () => {
     Helper.testElementExists('spinner')
   })
 
-  test('Should call authentication with correct values', async () => {
+  test('Should call Authentication with correct values', async () => {
     const { authenticationSpy } = makeSut()
 
     const email = faker.internet.email()
@@ -127,7 +127,7 @@ describe('Login Component', () => {
     expect(authenticationSpy.params).toEqual({ email, password })
   })
 
-  test('Should call authentication only once', async () => {
+  test('Should call Authentication only once', async () => {
     const { authenticationSpy } = makeSut()
 
     await simulateAValidSubmit()
@@ -136,7 +136,7 @@ describe('Login Component', () => {
     expect(authenticationSpy.callsCount).toBe(1)
   })
 
-  test('Should not call authentication if form is invalid', async () => {
+  test('Should not call Authentication if form is invalid', async () => {
     const { authenticationSpy } = makeSut({ validationError: faker.random.words() })
 
     await simulateAValidSubmit()
@@ -170,7 +170,7 @@ describe('Login Component', () => {
     const { saveAccessTokenMock } = makeSut()
 
     const error = new InvalidCredentialsError()
-    jest.spyOn(saveAccessTokenMock, 'save').mockReturnValueOnce(Promise.reject(error))
+    jest.spyOn(saveAccessTokenMock, 'save').mockRejectedValueOnce(error)
 
     await simulateAValidSubmit()
 
