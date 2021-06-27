@@ -1,35 +1,42 @@
 import React from 'react'
+import { Router } from 'react-router-dom'
+import { createMemoryHistory } from 'history'
 import faker from 'faker'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import SignUp from './signup'
-import { AddAccountSpy, Helper, ValidationStub } from '@/presentation/test'
+import { AddAccountSpy, Helper, SaveAccessTokenMock, ValidationStub } from '@/presentation/test'
 import { EmailInUseError } from '@/domain/errors'
 
 type SutTypes = {
   addAccountSpy: AddAccountSpy
+  saveAccessTokenMock: SaveAccessTokenMock
 }
 
 type SutParams = {
   validationError: string
 }
 
+const history = createMemoryHistory({ initialEntries: ['/signup'] })
 const makeSut = (params?: SutParams): SutTypes => {
   const validationStub = new ValidationStub()
   validationStub.errorMessage = params?.validationError
 
   const addAccountSpy = new AddAccountSpy()
 
+  const saveAccessTokenMock = new SaveAccessTokenMock()
+
   render(
-    // <Router history={history}>
+    <Router history={history}>
       <SignUp
         validation={validationStub}
         addAccount={addAccountSpy}
+        saveAccessToken={saveAccessTokenMock}
       />
-    // </Router>
+    </Router>
   )
 
-  return { addAccountSpy }
+  return { addAccountSpy, saveAccessTokenMock }
 }
 
 const simulateAValidSubmit = async (
@@ -187,5 +194,15 @@ describe('SignUp Component', () => {
 
     Helper.testElementText('main-error', error.message)
     Helper.testChildCount('error-wrap', 1)
+  })
+
+  test('Should call SaveAccessToken on success', async () => {
+    const { addAccountSpy, saveAccessTokenMock } = makeSut()
+
+    await simulateAValidSubmit()
+
+    expect(saveAccessTokenMock.accessToken).toBe(addAccountSpy.account.accessToken)
+    expect(history.length).toBe(1)
+    expect(history.location.pathname).toBe('/')
   })
 })
