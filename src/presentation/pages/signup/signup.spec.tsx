@@ -48,11 +48,6 @@ const simulateAValidSubmit = async (
   await waitFor(() => form)
 }
 
-const testElementText = (fieldName: string, text: string): void => {
-  const el = screen.getByTestId(fieldName)
-  expect(el.textContent).toBe(text)
-}
-
 describe('SignUp Component', () => {
   test('Should start with initial state', () => {
     const validationError = faker.random.word()
@@ -190,7 +185,7 @@ describe('SignUp Component', () => {
 
     await simulateAValidSubmit()
 
-    testElementText('main-error', error.message)
+    Helper.testElementText('main-error', error.message)
     Helper.testChildCount('error-wrap', 1)
   })
 })
