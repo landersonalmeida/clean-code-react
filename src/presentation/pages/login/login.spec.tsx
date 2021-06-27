@@ -178,11 +178,11 @@ describe('Login Component', () => {
     Helper.testChildCount('error-wrap', 1)
   })
 
-  test('Should navigate to signUp page', async () => {
+  test('Should go to signUp page', async () => {
     makeSut()
 
-    const register = screen.getByTestId('signup')
-    fireEvent.click(register)
+    const signUpLink = screen.getByTestId('signup-link')
+    fireEvent.click(signUpLink)
 
     expect(history.length).toBe(2)
     expect(history.location.pathname).toBe('/signup')
