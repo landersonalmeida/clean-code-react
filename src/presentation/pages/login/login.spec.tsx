@@ -149,11 +149,11 @@ describe('Login Component', () => {
     expect(authenticationSpy.callsCount).toBe(0)
   })
 
-  test('Should present error if authentication failed', async () => {
+  test('Should present error if Authentication failed', async () => {
     const { authenticationSpy } = makeSut()
 
     const error = new InvalidCredentialsError()
-    jest.spyOn(authenticationSpy, 'auth').mockReturnValueOnce(Promise.reject(error))
+    jest.spyOn(authenticationSpy, 'auth').mockRejectedValueOnce(error)
 
     await simulateAValidSubmit()
 

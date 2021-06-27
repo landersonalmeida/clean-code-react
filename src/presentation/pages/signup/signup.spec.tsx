@@ -4,6 +4,7 @@ import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import '@testing-library/jest-dom/extend-expect'
 import SignUp from './signup'
 import { AddAccountSpy, Helper, ValidationStub } from '@/presentation/test'
+import { EmailInUseError } from '@/domain/errors'
 
 type SutTypes = {
   addAccountSpy: AddAccountSpy
@@ -45,6 +46,11 @@ const simulateAValidSubmit = async (
   fireEvent.submit(form)
 
   await waitFor(() => form)
+}
+
+const testElementText = (fieldName: string, text: string): void => {
+  const el = screen.getByTestId(fieldName)
+  expect(el.textContent).toBe(text)
 }
 
 describe('SignUp Component', () => {
@@ -174,5 +180,17 @@ describe('SignUp Component', () => {
     await simulateAValidSubmit()
 
     expect(addAccountSpy.callsCount).toBe(0)
+  })
+
+  test('Should present error if AddAccount failed', async () => {
+    const { addAccountSpy } = makeSut()
+
+    const error = new EmailInUseError()
+    jest.spyOn(addAccountSpy, 'add').mockRejectedValueOnce(error)
+
+    await simulateAValidSubmit()
+
+    testElementText('main-error', error.message)
+    Helper.testChildCount('error-wrap', 1)
   })
 })
