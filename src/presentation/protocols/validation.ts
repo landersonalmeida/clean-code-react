@@ -1,3 +1,7 @@
+export type InputType = {
+  [key: string]: string
+}
+
 export interface Validation {
-  validate: (fieldName: string, fieldValue: string) => string | null
+  validate: (fieldName: string, input: InputType) => string | null
 }
