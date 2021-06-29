@@ -6,26 +6,32 @@ type Props = React.DetailedHTMLProps<React.InputHTMLAttributes<HTMLInputElement>
 
 const Input: React.FC<Props> = (props: Props) => {
   const { state, setState } = useContext(FormContext)
-
-  const enableInput = (event: React.FocusEvent<HTMLInputElement>): void => {
-    event.target.readOnly = false
-  }
-
-  const getStatus = (): string => {
-    return state[`${props.name!}Error`] ? '🔴' : '🟢'
-  }
-
-  const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
-    setState({
-      ...state,
-      [event.target.name]: event.target.value
-    })
-  }
+  const error = state[`${props.name!}Error`]
 
   return (
     <div className={Styles.inputWrap}>
-      <input data-testid={props.name} {...props} readOnly onFocus={enableInput} onChange={handleChange} />
-      <span data-testid={`${props.name!}-status`} title={state[`${props.name!}Error`] || 'Tudo certo'} className={Styles.status}>{getStatus()}</span>
+      <input
+        {...props}
+        id={`input_${props.name!}`}
+        placeholder=" "
+        data-testid={props.name}
+        readOnly
+        onFocus={event => { event.target.readOnly = false }}
+        onChange={event => {
+          setState({
+            ...state,
+            [event.target.name]: event.target.value
+          })
+        }}
+      />
+      <label htmlFor={`input_${props.name!}`}>{props.placeholder}</label>
+      <span
+        data-testid={`${props.name!}-status`}
+        title={error || 'Tudo certo'}
+        className={Styles.status}
+      >
+        {error ? '🔴' : '🟢'}
+      </span>
     </div>
   )
 }
