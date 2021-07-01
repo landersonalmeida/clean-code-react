@@ -59,14 +59,12 @@ describe('RemoteLoadSurveyList', () => {
     await expect(promise).rejects.toThrow(new UnexpectedError())
   })
 
-  test('Should return a list of SurveyModels if HttpGetClient returns 200', async () => {
+  test('Should return an empty list if HttpGetClient returns 204', async () => {
     const { sut, httpGetClientSpy } = makeSut()
-    const httpResult = mockSurveyListModel()
     httpGetClientSpy.response = {
-      statusCode: HttpStatusCode.ok,
-      body: httpResult
+      statusCode: HttpStatusCode.noContent
     }
     const surveyList = await sut.loadAll()
-    await expect(surveyList).toEqual(httpResult)
+    await expect(surveyList).toEqual([])
   })
 })
