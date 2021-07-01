@@ -80,4 +80,14 @@ describe('SignUp', () => {
 
     FormHelper.testUrl('/signup')
   })
+
+  it('Should present UnexpectedError on default error cases', () => {
+    Http.mockUnexpectedError()
+
+    simulateValidSubmit()
+
+    FormHelper.testMainError('Algo de errado aconteceu.')
+
+    FormHelper.testUrl('/signup')
+  })
 })
