@@ -3,7 +3,6 @@ import { HttpGetClientSpy } from '@/data/test'
 import { HttpStatusCode } from '@/data/protocols/http'
 import { UnexpectedError } from '@/domain/errors'
 import { SurveyModel } from '@/domain/models'
-import { mockSurveyListModel } from '@/domain/test'
 import faker from 'faker'
 
 type SutTypes = {
