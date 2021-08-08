@@ -105,14 +105,14 @@ describe('SignUp', () => {
     FormHelper.testUrl('/signup')
   })
 
-  it('Should present accessToken if valid credentials are provided', () => {
+  it('Should present account if valid credentials are provided', () => {
     Http.mockOk()
 
     simulateValidSubmit()
 
     FormHelper.testUrl('/')
 
-    FormHelper.testLocalStorageItem('accessToken')
+    FormHelper.testLocalStorageItem('account')
   })
 
   it('Should prevent multiple submits', () => {
