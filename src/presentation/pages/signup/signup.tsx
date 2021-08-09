@@ -77,7 +77,7 @@ const SignUp: React.FC<Props> = ({ validation, addAccount }: Props) => {
         password: state.password,
         passwordConfirmation: state.passwordConfirmation
       })
-      setCurrentAccount(account)
+      setCurrentAccount!(account)
 
       history.replace('/')
     } catch (error) {
