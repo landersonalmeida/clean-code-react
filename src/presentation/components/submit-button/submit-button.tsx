@@ -1,5 +1,5 @@
 import React, { useContext } from 'react'
-import FormContext from '@/presentation/contexts/form/form-context'
+import { FormContext } from '@/presentation/contexts'
 
 type Props = {
   text: string
