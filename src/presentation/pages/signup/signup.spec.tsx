@@ -4,7 +4,6 @@ import { createMemoryHistory } from 'history'
 import faker from 'faker'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { ApiContext } from '@/presentation/contexts'
-import '@testing-library/jest-dom/extend-expect'
 import SignUp from './signup'
 import { AddAccountSpy, Helper, ValidationStub } from '@/presentation/test'
 import { EmailInUseError } from '@/domain/errors'
@@ -63,8 +62,8 @@ describe('SignUp Component', () => {
     const validationError = faker.random.word()
     makeSut({ validationError })
 
-    Helper.testChildCount('error-wrap', 0)
-    Helper.testButtonIsDisabled('submit', true)
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(0)
+    expect(screen.getByRole('submit')).toBeDisabled()
     Helper.testStatusForField('name', validationError)
     Helper.testStatusForField('email', validationError)
     Helper.testStatusForField('password', validationError)
@@ -142,7 +141,7 @@ describe('SignUp Component', () => {
     Helper.populateField('email')
     Helper.populateField('password')
     Helper.populateField('passwordConfirmation')
-    Helper.testButtonIsDisabled('submit', false)
+    expect(screen.getByRole('submit')).toBeEnabled()
   })
 
   test('Should show spinner on submit', async () => {
@@ -150,7 +149,7 @@ describe('SignUp Component', () => {
 
     await simulateAValidSubmit()
 
-    Helper.testElementExists('spinner')
+    expect(screen.queryByTestId('spinner')).toBeInTheDocument()
   })
 
   test('Should call AddAccount with correct values', async () => {
@@ -195,8 +194,8 @@ describe('SignUp Component', () => {
 
     await simulateAValidSubmit()
 
-    Helper.testElementText('main-error', error.message)
-    Helper.testChildCount('error-wrap', 1)
+    expect(screen.getByTestId('main-error')).toHaveTextContent(error.message)
+    expect(screen.getByTestId('error-wrap').children).toHaveLength(1)
   })
 
   test('Should call UpdateCurrentAccount on success', async () => {
