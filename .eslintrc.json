@@ -25,6 +25,7 @@
     "@typescript-eslint/prefer-nullish-coalescing": "off",
     "@typescript-eslint/consistent-type-assertions": "off",
     "react/jsx-uses-react": "error",
-    "react/jsx-uses-vars": "error"
+    "react/jsx-uses-vars": "error",
+    "no-trailing-spaces": "warn"
   }
 }
