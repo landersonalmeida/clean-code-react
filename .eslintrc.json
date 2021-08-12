@@ -27,6 +27,7 @@
     "@typescript-eslint/no-floating-promises": "off",
     "react/jsx-uses-react": "error",
     "react/jsx-uses-vars": "error",
-    "no-trailing-spaces": "warn"
+    "no-trailing-spaces": "warn",
+    "padded-blocks": "warn"
   }
 }
