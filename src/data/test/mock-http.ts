@@ -7,7 +7,8 @@ export const mockPostRequest = (): HttpPostParams<any> => ({
 })
 
 export const mockGetRequest = (): HttpGetParams => ({
-  url: faker.internet.url()
+  url: faker.internet.url(),
+  headers: faker.datatype.json()
 })
 
 export class HttpPostClientSpy<BodyType, ResponseType> implements HttpPostClient<BodyType, ResponseType> {
