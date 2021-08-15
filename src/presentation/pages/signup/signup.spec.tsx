@@ -5,9 +5,10 @@ import faker from 'faker'
 import { fireEvent, render, screen, waitFor } from '@testing-library/react'
 import { ApiContext } from '@/presentation/contexts'
 import SignUp from './signup'
-import { AddAccountSpy, Helper, ValidationStub } from '@/presentation/test'
+import { Helper, ValidationStub } from '@/presentation/test'
 import { EmailInUseError } from '@/domain/errors'
 import { AccountModel } from '@/domain/models'
+import { AddAccountSpy } from '@/domain/test'
 
 type SutTypes = {
   addAccountSpy: AddAccountSpy
