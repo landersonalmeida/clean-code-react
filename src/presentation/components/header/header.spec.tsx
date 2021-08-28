@@ -1,10 +1,10 @@
 import { Header } from '@/presentation/components'
 import { ApiContext } from '@/presentation/contexts'
+import { AccountModel } from '@/domain/models'
+import { mockAccountModel } from '@/domain/test'
 import { fireEvent, screen, render } from '@testing-library/react'
 import { Router } from 'react-router-dom'
 import { createMemoryHistory, MemoryHistory } from 'history'
-import { AccountModel } from '@/domain/models'
-import { mockAccountModel } from '@/domain/test'
 import React from 'react'
 
 type SutTypes = {
