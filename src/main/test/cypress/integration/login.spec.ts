@@ -1,6 +1,7 @@
-import faker from 'faker'
+import * as FormHelper from '../support/form-helpers'
+import * as Helper from '../support/helpers'
 import * as Http from '../support/login-mocks'
-import * as FormHelper from '../support/form-helper'
+import faker from 'faker'
 
 const populateFields = (): void => {
   cy.getByTestId('email').focus().type(faker.internet.email())
@@ -58,7 +59,7 @@ describe('Login', () => {
 
     FormHelper.testMainError('Credenciais inválidas')
 
-    FormHelper.testUrl('/login')
+    Helper.testUrl('/login')
   })
 
   it('Should present UnexpectedError on default error cases', () => {
@@ -68,17 +69,7 @@ describe('Login', () => {
 
     FormHelper.testMainError('Algo de errado aconteceu.')
 
-    FormHelper.testUrl('/login')
-  })
-
-  it('Should present UnexpectedError if invalid data is returned', () => {
-    Http.mockInvalidData()
-
-    simulateValidSubmit()
-
-    FormHelper.testMainError('Algo de errado aconteceu.')
-
-    FormHelper.testUrl('/login')
+    Helper.testUrl('/login')
   })
 
   it('Should present account if valid credentials are provided', () => {
@@ -86,9 +77,9 @@ describe('Login', () => {
 
     simulateValidSubmit()
 
-    FormHelper.testUrl('/')
+    Helper.testUrl('/')
 
-    FormHelper.testLocalStorageItem('account')
+    Helper.testLocalStorageItem('account')
   })
 
   it('Should prevent multiple submits', () => {
@@ -98,7 +89,7 @@ describe('Login', () => {
 
     cy.getByRole('submit').dblclick()
 
-    FormHelper.testHttpCallsCount(1)
+    Helper.testHttpCallsCount(1)
   })
 
   it('Should not call submit if form is invalid', () => {
@@ -106,6 +97,6 @@ describe('Login', () => {
 
     cy.getByTestId('email').focus().type(faker.internet.email()).type('{enter}')
 
-    FormHelper.testHttpCallsCount(0)
+    Helper.testHttpCallsCount(0)
   })
 })
