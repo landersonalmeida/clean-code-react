@@ -15,4 +15,9 @@ describe('SurveyList', () => {
     Http.mockUnexpectedError()
     cy.getByTestId('error').should('contain.text', 'Algo de errado aconteceu.')
   })
+
+  it('Should logout on AccessDeniedError', () => {
+    Http.mockAccessDeniedError()
+    Helper.testUrl('/login')
+  })
 })
