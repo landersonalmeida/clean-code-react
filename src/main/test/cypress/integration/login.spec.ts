@@ -1,7 +1,12 @@
-import * as FormHelper from '../support/form-helpers'
-import * as Helper from '../support/helpers'
-import * as Http from '../support/login-mocks'
+import * as FormHelper from '../utils/form-helpers'
+import * as Helper from '../utils/helpers'
+import * as Http from '../utils/http-mocks'
 import faker from 'faker'
+
+const path = /login/
+const mockInvalidCredentialsError = (): void => Http.mockUnauthorizedError(path)
+const mockUnexpectedError = (): void => Http.mockServerError(path, 'POST')
+const mockSuccess = (): void => Http.mockOk(path, 'POST', { accessToken: '123', name: 'Opa' })
 
 const populateFields = (): void => {
   cy.getByTestId('email').focus().type(faker.internet.email())
@@ -53,7 +58,7 @@ describe('Login', () => {
   })
 
   it('Should present InvalidCredentialsError on 401', () => {
-    Http.mockInvalidCredentialsError()
+    mockInvalidCredentialsError()
 
     simulateValidSubmit()
 
@@ -63,7 +68,7 @@ describe('Login', () => {
   })
 
   it('Should present UnexpectedError on default error cases', () => {
-    Http.mockUnexpectedError()
+    mockUnexpectedError()
 
     simulateValidSubmit()
 
@@ -72,10 +77,12 @@ describe('Login', () => {
     Helper.testUrl('/login')
   })
 
-  it('Should present account if valid credentials are provided', () => {
-    Http.mockOk()
+  it('Should store account on localStorage if valid credentials are provided', () => {
+    mockSuccess()
 
     simulateValidSubmit()
+
+    cy.getByTestId('error-wrap').should('not.have.descendants')
 
     Helper.testUrl('/')
 
@@ -83,7 +90,7 @@ describe('Login', () => {
   })
 
   it('Should prevent multiple submits', () => {
-    Http.mockOk()
+    mockSuccess()
 
     populateFields()
 
@@ -93,7 +100,7 @@ describe('Login', () => {
   })
 
   it('Should not call submit if form is invalid', () => {
-    Http.mockOk()
+    mockSuccess()
 
     cy.getByTestId('email').focus().type(faker.internet.email()).type('{enter}')
 
