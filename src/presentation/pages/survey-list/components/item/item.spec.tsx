@@ -18,7 +18,7 @@ describe('SurveyItem Component', () => {
     expect(screen.getByTestId('icon')).toHaveProperty('src', IconName.thumbUp)
     expect(screen.getByTestId('question')).toHaveTextContent(survey.question)
     expect(screen.getByTestId('day')).toHaveTextContent('12')
-    expect(screen.getByTestId('month')).toHaveTextContent(/^jan$/)
+    expect(screen.getByTestId('month')).toHaveTextContent(/^Jan|jan$/)
     expect(screen.getByTestId('year')).toHaveTextContent('2021')
   })
 
@@ -31,7 +31,7 @@ describe('SurveyItem Component', () => {
     expect(screen.getByTestId('icon')).toHaveProperty('src', IconName.thumbDown)
     expect(screen.getByTestId('question')).toHaveTextContent(survey.question)
     expect(screen.getByTestId('day')).toHaveTextContent('03')
-    expect(screen.getByTestId('month')).toHaveTextContent(/^jan$/)
+    expect(screen.getByTestId('month')).toHaveTextContent(/^Jan|jan$/)
     expect(screen.getByTestId('year')).toHaveTextContent('2020')
   })
 })
