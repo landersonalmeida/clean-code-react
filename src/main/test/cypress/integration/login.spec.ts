@@ -96,6 +96,8 @@ describe('Login', () => {
 
     cy.getByRole('submit').dblclick()
 
+    cy.wait('@request')
+
     Helper.testHttpCallsCount(1)
   })
 

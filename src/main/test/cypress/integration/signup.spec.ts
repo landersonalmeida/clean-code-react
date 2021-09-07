@@ -111,15 +111,17 @@ describe('SignUp', () => {
   //   Helper.testLocalStorageItem('account')
   // })
 
-  // it('Should prevent multiple submits', () => {
-  //   mockSuccess()
+  it('Should prevent multiple submits', () => {
+    mockSuccess()
 
-  //   populateFields()
+    populateFields()
 
-  //   cy.getByRole('submit').dblclick()
+    cy.getByRole('submit').dblclick()
 
-  //   Helper.testHttpCallsCount(1)
-  // })
+    cy.wait('@request')
+
+    Helper.testHttpCallsCount(1)
+  })
 
   it('Should not call submit if form is invalid', () => {
     mockSuccess()
