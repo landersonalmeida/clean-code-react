@@ -1,9 +1,9 @@
-@import '../../styles/colors.scss';
+@import "../../styles/colors.scss";
 
 .signupWrap {
   display: flex;
   flex-direction: column;
-  height: 100vh;
+  min-height: 100vh;
   justify-content: space-between;
 
   .form {
@@ -14,7 +14,7 @@
     padding: 40px;
     border-radius: 8px;
     align-self: center;
-    box-shadow: 0 1px .3em -1px $black;
+    box-shadow: 0 1px 0.3em -1px $black;
 
     h2 {
       color: $primaryDark;
