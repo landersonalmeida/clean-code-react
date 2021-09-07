@@ -3,4 +3,4 @@
 . "$(dirname "$0")/common.sh"
 
 yarn run test:ci
-yarn run test:cypress
+yarn run test:cypress:ci
