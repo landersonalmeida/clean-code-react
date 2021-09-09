@@ -10,28 +10,16 @@ const makeSut = (survey = mockSurveyModel()): void => {
 
 describe('SurveyItem Component', () => {
   test('Should render with correct values', () => {
-    const survey = Object.assign(mockSurveyModel(), {
-      didAnswer: true,
-      date: new Date('2021-01-12T00:00:00')
-    })
+    const survey = Object.assign(mockSurveyModel(), { didAnswer: true })
     makeSut(survey)
     expect(screen.getByTestId('icon')).toHaveProperty('src', IconName.thumbUp)
     expect(screen.getByTestId('question')).toHaveTextContent(survey.question)
-    expect(screen.getByTestId('day')).toHaveTextContent('12')
-    expect(screen.getByTestId('month')).toHaveTextContent(/^Jan|jan$/)
-    expect(screen.getByTestId('year')).toHaveTextContent('2021')
   })
 
   test('Should render with correct values', () => {
-    const survey = Object.assign(mockSurveyModel(), {
-      didAnswer: false,
-      date: new Date('2020-01-03T00:00:00')
-    })
+    const survey = Object.assign(mockSurveyModel(), { didAnswer: false })
     makeSut(survey)
     expect(screen.getByTestId('icon')).toHaveProperty('src', IconName.thumbDown)
     expect(screen.getByTestId('question')).toHaveTextContent(survey.question)
-    expect(screen.getByTestId('day')).toHaveTextContent('03')
-    expect(screen.getByTestId('month')).toHaveTextContent(/^Jan|jan$/)
-    expect(screen.getByTestId('year')).toHaveTextContent('2020')
   })
 })
