@@ -1,5 +1,5 @@
 import Styles from './survey-result-styles.scss'
-import { Header, Loading, Footer } from '@/presentation/components'
+import { Header, Loading, Footer, Calendar } from '@/presentation/components'
 import FlipMove from 'react-flip-move'
 import React from 'react'
 
@@ -9,7 +9,10 @@ const SurveyResult: React.FC = () => {
       <Header />
 
       <div className={Styles.contentWrap}>
-        <h2>Qual é seu framework web favorito?</h2>
+        <hgroup>
+          <Calendar date={new Date()} className={Styles.calendarWrap} />
+          <h2>Qual é seu framework web favorito?</h2>
+        </hgroup>
         <FlipMove className={Styles.answerList}>
           <li>
             <img src="https://fordevs.herokuapp.com/static/img/logo-react.png" alt="Logo React" />
