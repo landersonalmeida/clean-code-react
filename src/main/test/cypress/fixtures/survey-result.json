@@ -1,7 +1,6 @@
 {
-  "id": 1,
-  "question": "Question 1",
-  "date": "2020-09-01T00:00:00",
+  "question": "Question",
+  "date": "2020-01-01T00:00:00",
   "answers": [{
     "image": "any_image",
     "answer": "any_answer",
@@ -9,7 +8,7 @@
     "percent": 70,
     "isCurrentAccountAnswer": true
   }, {
-    "answer": "any_answer",
+    "answer": "any_answer_2",
     "count": 1,
     "percent": 30,
     "isCurrentAccountAnswer": false
