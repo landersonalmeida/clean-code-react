@@ -45,12 +45,16 @@
 
   footer {
     background-color: $primary;
-    color: $white;
-    line-height: 40px;
-    text-transform: lowercase;
-    text-align: center;
     cursor: pointer;
     border-radius: 0 0 8px 8px;
+
+    a {
+      text-align: center;
+      text-transform: lowercase;
+      line-height: 40px;
+      color: $white;
+      display: block;
+    }
 
     &:hover {
       background-color: $primaryDark;
