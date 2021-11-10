@@ -32,6 +32,7 @@
     "react/jsx-uses-vars": "error",
     "no-trailing-spaces": "warn",
     "padded-blocks": "warn",
-    "no-multiple-empty-lines": "warn"
+    "no-multiple-empty-lines": "warn",
+    "react/prop-types": "off"
   }
 }
