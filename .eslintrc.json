@@ -26,6 +26,7 @@
     "@typescript-eslint/consistent-type-assertions": "off",
     "@typescript-eslint/no-floating-promises": "off",
     "@typescript-eslint/no-namespace": "off",
+    "@typescript-eslint/no-unnecessary-type-assertion": "off",
     "no-redeclare": "off",
     "import/export": "off",
     "react/jsx-uses-react": "error",
