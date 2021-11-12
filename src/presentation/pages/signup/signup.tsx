@@ -4,7 +4,7 @@ import { LoginHeader, Footer, currentAccountState } from '@/presentation/compone
 import { Validation } from '@/presentation/protocols/validation'
 import { AddAccount } from '@/domain/usecases'
 import { Link, useHistory } from 'react-router-dom'
-import { useRecoilState, useRecoilValue } from 'recoil'
+import { useRecoilState, useRecoilValue, useResetRecoilState } from 'recoil'
 import React, { useEffect } from 'react'
 
 type Props = {
@@ -13,14 +13,16 @@ type Props = {
 }
 
 const SignUp: React.FC<Props> = ({ validation, addAccount }: Props) => {
+  const resetSignUpState = useResetRecoilState(signupState)
   const { setCurrentAccount } = useRecoilValue(currentAccountState)
   const history = useHistory()
   const [state, setState] = useRecoilState(signupState)
 
-  useEffect(() => { validate('name') }, [state.name])
-  useEffect(() => { validate('email') }, [state.email])
-  useEffect(() => { validate('password') }, [state.password])
-  useEffect(() => { validate('passwordConfirmation') }, [state.passwordConfirmation])
+  useEffect(() => resetSignUpState(), [])
+  useEffect(() => validate('name'), [state.name])
+  useEffect(() => validate('email'), [state.email])
+  useEffect(() => validate('password'), [state.password])
+  useEffect(() => validate('passwordConfirmation'), [state.passwordConfirmation])
 
   const validate = (field: string): void => {
     const { name, email, password, passwordConfirmation } = state

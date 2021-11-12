@@ -34,7 +34,7 @@ describe('Login', () => {
     cy.getByTestId('error-wrap').should('not.have.descendants')
   })
 
-  it.only('Should reset on page load', () => {
+  it('Should reset state on page load', () => {
     cy.getByTestId('email').focus().type(faker.internet.email())
     FormHelper.testInputStatus('email')
     cy.getByTestId('signup-link').click()
