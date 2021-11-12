@@ -15,7 +15,6 @@ const populateFields = (): void => {
 
 const simulateValidSubmit = (): void => {
   populateFields()
-
   cy.getByRole('submit').click()
 }
 
@@ -33,6 +32,14 @@ describe('Login', () => {
 
     cy.getByRole('submit').should('have.attr', 'disabled')
     cy.getByTestId('error-wrap').should('not.have.descendants')
+  })
+
+  it.only('Should reset on page load', () => {
+    cy.getByTestId('email').focus().type(faker.internet.email())
+    FormHelper.testInputStatus('email')
+    cy.getByTestId('signup-link').click()
+    cy.getByTestId('login-link').click()
+    FormHelper.testInputStatus('email', 'Campo obrigatório')
   })
 
   it('Should present error state if form is invalid', () => {
