@@ -3,10 +3,10 @@ import * as Helper from '../utils/helpers'
 import * as Http from '../utils/http-mocks'
 import faker from 'faker'
 
-const path = /login/
+const path = /api\/login/
 const mockInvalidCredentialsError = (): void => Http.mockUnauthorizedError(path)
 const mockUnexpectedError = (): void => Http.mockServerError(path, 'POST')
-const mockSuccess = (): void => Http.mockOk(path, 'POST', 'account')
+const mockSuccess = (): void => Http.mockOk(path, 'POST', 'account', 'loginRequest')
 
 const populateFields = (): void => {
   cy.getByTestId('email').focus().type(faker.internet.email())
@@ -103,9 +103,9 @@ describe('Login', () => {
 
     cy.getByRole('submit').dblclick()
 
-    cy.wait('@request')
+    cy.wait('@loginRequest')
 
-    Helper.testHttpCallsCount(1)
+    cy.get('@loginRequest.all').should('have.length', 1)
   })
 
   it('Should not call submit if form is invalid', () => {
@@ -113,6 +113,6 @@ describe('Login', () => {
 
     cy.getByTestId('email').focus().type(faker.internet.email()).type('{enter}')
 
-    Helper.testHttpCallsCount(0)
+    cy.get('@loginRequest.all').should('have.length', 0)
   })
 })
